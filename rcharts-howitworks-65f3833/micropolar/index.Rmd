@@ -1,0 +1,112 @@
+---
+title       : rCharts
+author      : Ramnath Vaidyanathan
+framework   : minimal
+highlighter : prettify
+hitheme     : twitter-bootstrap
+mode        : selfcontained
+github      : {user: rcharts, repo: howitworks, branch: gh-pages}
+widgets     : [disqus, ganalytics]
+assets:
+  css: 
+    - "http://fonts.googleapis.com/css?family=PT+Sans"
+    - "../assets/css/app.css"
+    - "../assets/css/gh-buttons.css"
+url: {lib: ../libraries}
+---
+
+## Micropolar with rCharts
+
+[Micropolar](http://micropolar.org) is a polar chart library made with `d3.js`. I saw the announcement on twitter by [@d3visualization](https://twitter.com/d3visualization) and could not resist the urge to integrate it with rCharts.
+
+I should say that `micropolar` is extremely well designed for reusability.  The author Chris Viau is also a coauthor of the very good book [Developing a D3.js Edge](http://bleedingedgepress.com/our-books/developing-a-d3-js-edge/) that details how to make `d3.js` charts reusable.  Well designed reusable charts integrate easily with `rCharts`.
+
+### Getting Started
+
+We need a couple of helper functions to transform a data frame to the format required by micropolar, and to create a polar plot.
+
+```{r message = F, echo = F, cache = F}
+library(knitr)
+opts_chunk$set(results = 'asis', comment = NA, tidy = F)
+```
+
+```{r}
+# Convert data frame to format required by micropolar
+make_dataset = function(x, y, data = data){
+  require(rCharts)
+  toJSONArray2(data[c(x, y)], json = F, names = F)
+}
+
+# Create a polar plot given data and type
+polarPlot <- function(data, type, ...){
+ u <- rCharts$new()
+ u$setLib('http://rcharts.github.io/howitworks/libraries/widgets/micropolar')
+ if (!missing(data)) u$set(data = data)
+ u$set(type = type, ...)
+ return(u)
+}
+```
+
+Let us define some data that we can use
+
+```{r}
+dat = data.frame(
+  x = c(60, 180, 270, 360),
+  y = c(5, 2, 3, 4)
+)
+```
+
+
+### DotPlot
+
+```{r dotPlot, message = F}
+require(rCharts)
+options(RCHART_HEIGHT = 400, RCHART_WIDTH = 400)
+polarPlot(
+  data = make_dataset('x', 'y', dat),
+  type = 'dotPlot'
+)
+```
+
+### LinePlot
+
+We are working on some useful examples combining R data with the other `micropolar` chart types.  For now, let's look at each chart type using the defaults specified by `micropolar`.
+
+```{r linePlot}
+polarPlot(type = 'linePlot')
+```
+
+### AreaChart
+
+```{r areaChart}
+polarPlot(type = 'areaChart')
+```
+
+### BarChart
+
+```{r barChart}
+polarPlot(type = 'barChart')
+```
+
+### Clock
+
+```{r clock}
+polarPlot(type = 'clock')
+```
+
+### Acknowledgements
+
+I would like to thank [TimelyPortfolio](http://github.com/timelyportfolio) for adding most of the examples in this post!
+
+<div id='disqus_thread'></div>
+
+<style>
+iframe {
+  height: 410px;
+}
+</style>
+
+
+
+
+
