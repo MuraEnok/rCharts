@@ -6,10 +6,10 @@ library(ctv)
 library(SnowballC)
 library(XML)
 library(RColorBrewer)
-
+# h/hillsong+united/
 # install.views("NaturalLanguageProcessing")
 # put the name of artist in url_m with the folder location
-url_m = "r/robin+thicke/"
+url_m = "g/garth+brooks"
 url_base = "http://www.lyricsfreak.com/"
 url_end = "/last_30_lyrics.xml"
 
@@ -29,7 +29,7 @@ for (i in 1:length(src)) {
   body = pagetree[[1]]
   content = body$children[[2]]$children$div$children[[3]]
   # get the name of song to save as text file
-  nm = gsub("[0-9 /.html/_+]", "", unlist(strsplit(url, "/"))[6])
+  nm = gsub("[0-9 /.html/_\\+]", "", unlist(strsplit(url, "/"))[6])
   # get the artis name to make folder to store text files
   artist = paste(gsub("[0-9 /.html/_+]", "", unlist(strsplit(url, "/"))[5]))
   # this creates dir with the name and throws off 29 warnings that the folder exits already
@@ -75,6 +75,6 @@ loc =paste(cname, "/", artist, ".png", sep="")
 pal2 <- brewer.pal(8,"Dark2")
 # this creates a permanant png to be viewed.
 png(loc, width=800, height=600)
-wordcloud(d$word, d$freq, min.freq=10, colors=pal2, scale=c(8,.2), rot.per=.15, random.order=F, max.words=Inf)
+wordcloud(d$word, d$freq, min.freq=3, colors=pal2, scale=c(8,.2), rot.per=.15, random.order=F, max.words=Inf)
 # wordcloud(d$word, d$freq, min.freq=20)
 dev.off()
